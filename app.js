@@ -13,7 +13,17 @@ let environmentMaster = null;
 let environment = null;
 
 let selectedEnvironmentCode = null;
+let selectedAdditionalMode = "post";
 let selectedClass = null;
+
+const ADDITIONAL_PACKS = new Set([
+  "DBN", "BOS", "OOT", "ALT", "STR",
+  "ROG", "VEC", "UCL", "WUP",
+  "FOH", "SOR", "ETA", "DOV", "RSC",
+  "DOC", "OOS", "EOP", "RGW", "CDB",
+  "EAA", "AOA", "HOR", "ORS", "RSL",
+  "HOS"
+]);
 
 let currentPick = 0;
 let deck = [];
@@ -85,8 +95,25 @@ async function initialize() {
     environmentMaster =
       await environmentResponse.json();
 
-    cardDetails =
+    const rawCardDetails =
       await detailResponse.json();
+
+    if (Array.isArray(rawCardDetails)) {
+
+      cardDetails = Object.fromEntries(
+        rawCardDetails.map(detail => [
+          String(detail.id),
+          detail
+        ])
+      );
+
+    }
+
+    else {
+
+      cardDetails = rawCardDetails || {};
+
+    }
 
 
     console.log(
@@ -222,75 +249,85 @@ function createEnvironmentButtons() {
       "environment-options"
     );
 
-
   if (!container) {
     return;
   }
 
-
   container.innerHTML = "";
-
 
   const environmentCodes =
     Object.keys(
       environmentMaster.environments
     );
 
-
   environmentCodes.forEach(code => {
 
-    const button =
-      document.createElement("button");
+    const modes =
+      ADDITIONAL_PACKS.has(code)
+        ? ["pre", "post"]
+        : ["post"];
 
+    modes.forEach(mode => {
 
-    button.className =
-      "environment-button";
+      const button =
+        document.createElement("button");
 
+      button.className =
+        "environment-button";
 
-    button.dataset.code =
-      code;
+      const selectionKey =
+        `${code}:${mode}`;
 
+      button.dataset.code =
+        selectionKey;
 
-    const codeDiv =
-      document.createElement("div");
+      const codeDiv =
+        document.createElement("div");
 
+      codeDiv.textContent =
+        code;
 
-    codeDiv.textContent =
-      code;
+      const nameDiv =
+        document.createElement("div");
 
+      const phaseLabel =
+        ADDITIONAL_PACKS.has(code)
+          ? (
+              mode === "pre"
+                ? "【アディショナル前】"
+                : "【アディショナル後】"
+            )
+          : "";
 
-    const nameDiv =
-      document.createElement("div");
+      nameDiv.textContent =
+        `${getEnvironmentName(code)}${phaseLabel}`;
 
+      nameDiv.style.fontSize =
+        "11px";
 
-    nameDiv.textContent =
-      getEnvironmentName(code);
+      nameDiv.style.fontWeight =
+        "normal";
 
+      nameDiv.style.marginTop =
+        "5px";
 
-    nameDiv.style.fontSize =
-      "11px";
+      nameDiv.style.opacity =
+        "0.8";
 
-    nameDiv.style.fontWeight =
-      "normal";
+      button.appendChild(codeDiv);
+      button.appendChild(nameDiv);
 
-    nameDiv.style.marginTop =
-      "5px";
+      button.addEventListener(
+        "click",
+        () => selectEnvironment(
+          code,
+          mode
+        )
+      );
 
-    nameDiv.style.opacity =
-      "0.8";
+      container.appendChild(button);
 
-
-    button.appendChild(codeDiv);
-    button.appendChild(nameDiv);
-
-
-    button.addEventListener(
-      "click",
-      () => selectEnvironment(code)
-    );
-
-
-    container.appendChild(button);
+    });
 
   });
 
@@ -301,16 +338,23 @@ function createEnvironmentButtons() {
    ENVIRONMENT SELECT
 ========================================================= */
 
-function selectEnvironment(code) {
+function selectEnvironment(
+  code,
+  additionalMode = "post"
+) {
 
   selectedEnvironmentCode =
     code;
 
+  selectedAdditionalMode =
+    additionalMode;
 
   environment =
     environmentMaster
       .environments[code];
 
+  const selectionKey =
+    `${code}:${additionalMode}`;
 
   document
     .querySelectorAll(
@@ -320,28 +364,32 @@ function selectEnvironment(code) {
 
       button.classList.toggle(
         "selected",
-        button.dataset.code === code
+        button.dataset.code === selectionKey
       );
 
     });
 
+  const phaseLabel =
+    ADDITIONAL_PACKS.has(code)
+      ? (
+          additionalMode === "pre"
+            ? "【アディショナル前】"
+            : "【アディショナル後】"
+        )
+      : "";
 
   setText(
     "environment-name",
-    `${code} - ${getEnvironmentName(code)}`
+    `${code} - ${getEnvironmentName(code)}${phaseLabel}`
   );
-
 
   const startButton =
     document.getElementById(
       "start-button"
     );
 
-
   if (startButton) {
-
     startButton.disabled = false;
-
   }
 
 }
@@ -722,6 +770,37 @@ function basePool() {
 
       if (!allowed) {
         return false;
+      }
+
+
+      /*
+        アディショナル前では
+        最新弾のアディショナルカードだけ除外。
+
+        過去弾のアディショナルは残す。
+      */
+
+      if (
+        selectedAdditionalMode === "pre"
+        &&
+        card.pack === environment.latest_pack
+      ) {
+
+        const detail =
+          cardDetails[String(card.id)];
+
+        if (
+          detail
+          &&
+          detail.additional === true
+          &&
+          detail.additional_pack === environment.latest_pack
+        ) {
+
+          return false;
+
+        }
+
       }
 
 
