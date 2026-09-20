@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Shadowverse 2Pick Simulator</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+
+    <!-- =====================================================
+         START SCREEN
+    ====================================================== -->
+
+    <section
+      id="start-screen"
+      class="screen active"
+    >
+
+      <header class="top-header">
+
+        <div class="header-title">
+          2Pick
+        </div>
+
+        <div class="header-subtitle">
+          HISTORICAL DRAFT SIMULATOR
+        </div>
+
+      </header>
+
+
+      <main class="start-content">
+
+        <h1>
+          環境を選択してください
+        </h1>
+
+        <p class="screen-description">
+          再現する2Pick環境を選択
+        </p>
+
+
+        <div
+          id="environment-options"
+          class="environment-grid"
+        ></div>
+
+
+        <div
+          id="environment-name"
+          class="selected-environment"
+        >
+          環境未選択
+        </div>
+
+<!-- ======================================================
+     LEADER SELECT MODE
+====================================================== -->
+
+<div id="leader-mode-area">
+
+  <div class="leader-mode-title">
+    LEADER SELECT
+  </div>
+
+  <div class="leader-mode-options">
+
+    <button
+      id="random-leader-mode"
+      class="leader-mode-button selected"
+      type="button"
+    >
+      <span class="leader-mode-main">
+        通常2Pick
+      </span>
+
+      <span class="leader-mode-sub">
+        ランダムな3リーダーから選択
+      </span>
+    </button>
+
+
+    <button
+      id="free-leader-mode"
+      class="leader-mode-button"
+      type="button"
+    >
+      <span class="leader-mode-main">
+        自由選択
+      </span>
+
+      <span class="leader-mode-sub">
+        好きなリーダーを選択
+      </span>
+    </button>
+
+  </div>
+
+</div>
+        <button
+          id="start-button"
+          class="main-button"
+          disabled
+        >
+          クラス選択へ
+        </button>
+
+      </main>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CLASS SCREEN
+    ====================================================== -->
+
+    <section
+      id="class-screen"
+      class="screen"
+    >
+
+      <header class="top-header">
+
+        <div class="header-title">
+          2Pick
+        </div>
+
+      </header>
+
+
+      <main class="class-content">
+
+        <h1>
+          使用するクラスを選択してください
+        </h1>
+
+
+        <div
+          id="class-options"
+          class="class-options"
+        ></div>
+
+      </main>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PICK SCREEN
+    ====================================================== -->
+
+    <section
+      id="pick-screen"
+      class="screen pick-screen"
+    >
+
+
+      <!-- 上部 -->
+
+      <header class="pick-header">
+
+        <div class="pick-header-left">
+
+          <div class="small-label">
+            2Pick
+          </div>
+
+          <div
+            id="pick-counter"
+            class="pick-counter"
+          >
+            1 / 15 Pick
+          </div>
+
+        </div>
+
+
+        <div class="pick-header-center">
+
+          <div
+            id="selected-class"
+            class="selected-class"
+          ></div>
+
+          <div
+            id="pick-type"
+            class="pick-type"
+          ></div>
+
+        </div>
+
+
+        <div class="pick-header-right">
+
+          <span class="deck-count-label">
+            DECK
+          </span>
+
+          <span
+            id="deck-count"
+            class="deck-count"
+          >
+            0
+          </span>
+
+          <span class="deck-total">
+            /30
+          </span>
+
+        </div>
+
+      </header>
+
+
+
+      <div class="instruction-bar">
+        どちらかのカードを選択してください
+      </div>
+
+
+
+      <!-- =================================================
+           メインPickエリア
+      ================================================== -->
+
+      <main class="pick-main">
+
+
+        <!-- 左ペア -->
+
+        <section class="pair-side left-side">
+
+          <div
+            id="left-pair"
+            class="pair"
+          >
+
+            <div class="card-slot"></div>
+
+            <div class="card-slot"></div>
+
+          </div>
+
+
+          <button
+            id="left-select-button"
+            class="select-button blue-select"
+          >
+            選択
+          </button>
+
+        </section>
+
+
+
+        <!-- 中央情報 -->
+
+        <aside class="draft-status">
+
+          <div class="status-class">
+
+            <div class="status-small">
+              CLASS
+            </div>
+
+            <div
+              id="status-class-name"
+              class="status-class-name"
+            >
+              -
+            </div>
+
+          </div>
+
+
+          <div class="status-divider"></div>
+
+
+          <div class="status-deck">
+
+            <span id="status-deck-count">
+              0
+            </span>
+
+            <span>
+              /30
+            </span>
+
+          </div>
+
+
+          <div class="status-divider"></div>
+
+
+          <div class="cost-title">
+            COST
+          </div>
+
+
+          <div
+            id="cost-curve"
+            class="cost-curve"
+          >
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="1">0</span>
+              <div class="cost-bar" data-cost-bar="1"></div>
+              <small>1</small>
+            </div>
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="2">0</span>
+              <div class="cost-bar" data-cost-bar="2"></div>
+              <small>2</small>
+            </div>
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="3">0</span>
+              <div class="cost-bar" data-cost-bar="3"></div>
+              <small>3</small>
+            </div>
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="4">0</span>
+              <div class="cost-bar" data-cost-bar="4"></div>
+              <small>4</small>
+            </div>
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="5">0</span>
+              <div class="cost-bar" data-cost-bar="5"></div>
+              <small>5</small>
+            </div>
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="6">0</span>
+              <div class="cost-bar" data-cost-bar="6"></div>
+              <small>6</small>
+            </div>
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="7">0</span>
+              <div class="cost-bar" data-cost-bar="7"></div>
+              <small>7</small>
+            </div>
+
+            <div class="cost-column">
+              <span class="cost-number" data-cost="8">0</span>
+              <div class="cost-bar" data-cost-bar="8"></div>
+              <small>8+</small>
+            </div>
+
+          </div>
+
+        </aside>
+
+
+
+        <!-- 右ペア -->
+
+        <section class="pair-side right-side">
+
+          <div
+            id="right-pair"
+            class="pair"
+          >
+
+            <div class="card-slot"></div>
+
+            <div class="card-slot"></div>
+
+          </div>
+
+
+          <button
+            id="right-select-button"
+            class="select-button orange-select"
+          >
+            選択
+          </button>
+
+        </section>
+
+      </main>
+
+
+
+      <!-- =================================================
+           取得済みカード
+      ================================================== -->
+
+      <section class="picked-area">
+
+        <div class="picked-header">
+
+          <span>
+            PICKED CARDS
+          </span>
+
+          <span
+            id="picked-card-count"
+          >
+            0 / 30
+          </span>
+
+        </div>
+
+
+        <div
+          id="picked-cards"
+          class="picked-cards"
+        >
+
+          <div class="picked-empty">
+            選択したカードがここに表示されます
+          </div>
+
+        </div>
+
+      </section>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         RESULT SCREEN
+    ====================================================== -->
+
+    <section
+      id="result-screen"
+      class="screen"
+    >
+
+      <header class="top-header">
+
+        <div class="header-title">
+          DECK COMPLETE
+        </div>
+
+      </header>
+
+
+      <main class="result-content">
+
+        <h1>
+          2Pick Deck
+        </h1>
+
+
+        <div
+          id="result-environment"
+          class="result-environment"
+        ></div>
+
+
+        <div
+          id="result-class"
+          class="result-class"
+        ></div>
+
+
+        <div
+          id="deck-grid"
+          class="deck-grid"
+        ></div>
+
+
+        <button
+          id="restart-button"
+          class="main-button"
+        >
+          環境選択へ戻る
+        </button>
+
+      </main>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CARD DETAIL MODAL
+    ====================================================== -->
+
+    <div
+      id="card-modal"
+      class="card-modal"
+      aria-hidden="true"
+    >
+
+      <div
+        id="card-modal-backdrop"
+        class="card-modal-backdrop"
+      ></div>
+
+
+      <div class="card-modal-panel">
+
+        <button
+          id="card-modal-close"
+          class="card-modal-close"
+          type="button"
+        >
+          ×
+        </button>
+
+
+        <div class="modal-card-layout">
+
+
+          <div class="modal-image-area">
+
+            <img
+              id="modal-card-image"
+              src=""
+              alt=""
+            >
+
+          </div>
+
+
+          <div class="modal-info-area">
+
+            <div
+              id="modal-card-name"
+              class="modal-card-name"
+            ></div>
+
+
+            <div
+              id="modal-card-meta"
+              class="modal-card-meta"
+            ></div>
+
+
+            <div class="modal-divider"></div>
+
+
+            <div
+              id="modal-card-description"
+              class="modal-card-description"
+            >
+              カード能力の表示は今後追加予定です。
+            </div>
+
+
+            <a
+              id="portal-link"
+              class="portal-button"
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Shadowverse Portalで見る
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+  <script src="app.js"></script>
+
+</body>
+
+</html>
