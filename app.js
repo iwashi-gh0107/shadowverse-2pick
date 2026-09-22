@@ -44,7 +44,6 @@ let pickLocked = false;
 ========================================================= */
 
 let leaderSelectMode = "random";
-
 /* =========================================================
    PICK LABELS
 ========================================================= */
@@ -727,10 +726,7 @@ function basePool() {
 
   const filtered =
     cards.filter(card => {
-      // 別イラスト・コラボ・スキン版を2Pickから除外
-      if (String(card.id).startsWith("7")) {
-        return false;
-      }
+
 
       if (
         card.class !== selectedClass
@@ -2617,15 +2613,7 @@ const freeLeaderModeButton =
 
   if (rightButton) {
 
-    rightButton.addEventListconst randomLeaderModeButton =
-  document.getElementById(
-    "random-leader-mode"
-  );
-
-const freeLeaderModeButton =
-  document.getElementById(
-    "free-leader-mode"
-  );ener(
+    rightButton.addEventListener(
       "click",
       () => {
 
