@@ -69,7 +69,7 @@ async function initialize() {
       environmentResponse,
       detailResponse
     ] = await Promise.all([
-      fetch("data/cards.json"),
+      fetch("data/cards.json?v=20260922-alt1"),
       fetch("data/environments.json"),
       fetch("data/card_details.json")
     ]);
