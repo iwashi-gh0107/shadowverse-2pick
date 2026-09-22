@@ -727,7 +727,10 @@ function basePool() {
 
   const filtered =
     cards.filter(card => {
-
+      // 別イラスト・コラボ・スキン版を2Pickから除外
+      if (String(card.id).startsWith("7")) {
+        return false;
+      }
 
       if (
         card.class !== selectedClass
