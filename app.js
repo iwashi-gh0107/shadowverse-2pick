@@ -728,22 +728,6 @@ function basePool() {
     cards.filter(card => {
 
 
-      /*
-        別イラスト・コラボ・スキン版などを除外。
-
-        7xxxxxxxx 系は通常カードを元にした
-        特殊バージョンなので2Pickでは使用しない。
-      */
-
-      if (
-        String(card.id).startsWith("7")
-      ) {
-
-        return false;
-
-      }
-
-
       if (
         card.class !== selectedClass
         &&
@@ -2517,6 +2501,8 @@ function setText(
   }
 
 }
+
+
 function escapeHTML(value) {
 
   return String(
@@ -2545,6 +2531,130 @@ function escapeHTML(value) {
 
 }
 
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+function setupEvents() {
+
+  const startButton =
+    document.getElementById(
+      "start-button"
+    );
+
+
+  const leftButton =
+    document.getElementById(
+      "left-select-button"
+    );
+  
+ const randomLeaderModeButton =
+  document.getElementById(
+    "random-leader-mode"
+  );
+
+
+const freeLeaderModeButton =
+  document.getElementById(
+    "free-leader-mode"
+  );
+
+
+  const rightButton =
+    document.getElementById(
+      "right-select-button"
+    );
+
+
+  const restartButton =
+    document.getElementById(
+      "restart-button"
+    );
+
+
+  const modalClose =
+    document.getElementById(
+      "card-modal-close"
+    );
+
+
+  const modalBackdrop =
+    document.getElementById(
+      "card-modal-backdrop"
+    );
+
+
+  if (startButton) {
+
+    startButton.addEventListener(
+      "click",
+      startGame
+    );
+
+  }
+
+
+  if (leftButton) {
+
+    leftButton.addEventListener(
+      "click",
+      () => {
+
+        choosePair(
+          currentLeft
+        );
+
+      }
+    );
+
+  }
+
+
+  if (rightButton) {
+
+    rightButton.addEventListener(
+      "click",
+      () => {
+
+        choosePair(
+          currentRight
+        );
+
+      }
+    );
+
+  }
+
+
+  if (restartButton) {
+
+    restartButton.addEventListener(
+      "click",
+      restartGame
+    );
+
+  }
+
+
+  if (modalClose) {
+
+    modalClose.addEventListener(
+      "click",
+      closeCardModal
+    );
+
+  }
+
+
+  if (modalBackdrop) {
+
+    modalBackdrop.addEventListener(
+      "click",
+      closeCardModal
+    );
+
+  }
 /* =====================================================
    LEADER SELECT MODE
 ===================================================== */
@@ -2631,7 +2741,7 @@ if (freeLeaderModeButton) {
     }
   );
 
-
+}
 
 
 /* =========================================================
