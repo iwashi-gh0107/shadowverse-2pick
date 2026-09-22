@@ -44,6 +44,7 @@ let pickLocked = false;
 ========================================================= */
 
 let leaderSelectMode = "random";
+
 /* =========================================================
    PICK LABELS
 ========================================================= */
@@ -2613,7 +2614,15 @@ const freeLeaderModeButton =
 
   if (rightButton) {
 
-    rightButton.addEventListener(
+    rightButton.addEventListconst randomLeaderModeButton =
+  document.getElementById(
+    "random-leader-mode"
+  );
+
+const freeLeaderModeButton =
+  document.getElementById(
+    "free-leader-mode"
+  );ener(
       "click",
       () => {
 
